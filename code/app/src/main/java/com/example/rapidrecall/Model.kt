@@ -14,7 +14,7 @@ class AttemptRecord(
 class GameModel{
     private var currentLength: Int = 0
     private var currentTarSeq: String = ""
-    private val AttemptHistory = mutableListOf<AttemptRecord>()
+    val AttemptHistory = mutableListOf<AttemptRecord>()
 
     fun generateNewSequence(length: Int): String{
         currentLength = length

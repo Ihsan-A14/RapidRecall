@@ -1,5 +1,6 @@
 package com.example.rapidrecall
 
+import android.R
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,13 +24,19 @@ class GameViewModel: ViewModel() {
         currentScreen.value = Navigation.LEVEL_SELECT
     }
 
-    fun onLevelSelected(length: Int){
+    fun onLevelSelected(length: Int) {
         currentScreen.value = Navigation.MEMORIZE
         val target = GameModel.generateNewSequence(length)
 
-        currentSequence.value = target
         viewModelScope.launch {
-            delay(2000.milliseconds)
+            for (i in 0..length - 1) {
+                currentSequence.value = target[i].toString()
+                delay(800.milliseconds)
+
+                currentSequence.value = ""
+                delay(10.milliseconds)
+            }
+
             currentScreen.value = Navigation.INPUT
         }
     }
@@ -46,4 +53,9 @@ class GameViewModel: ViewModel() {
         currentSequence.value = ""
         currentResult.value = null
     }
+
+    fun getAccuracy(): Double = GameModel.accuracy()
+    fun getHistory(): List<AttemptRecord> = GameModel.AttemptHistory
+    fun getTotalGames(): Int = GameModel.AttemptHistory.size
+    fun getTotalWins(): Int = GameModel.AttemptHistory.count{it.isCorrect}
 }
